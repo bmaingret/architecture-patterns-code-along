@@ -5,7 +5,7 @@ def test_can_save_and_read_order_line(session):
     order_line = OrderLine('ref-A', 'sku-A', 10)
     session.add(order_line)
     session.commit()
-    result = session.query(OrderLine).filter(OrderLine.order_reference=='ref-A').one()
+    result = session.query(OrderLine).filter(OrderLine.order_reference=='ref-A').one() 
     assert order_line==result
 
 def test_can_save_and_read_multiple_order_line(session):
@@ -44,7 +44,7 @@ def test_order_line_allocation(session):
     session.add(batch)
     session.commit()
     result = session.query(Batch).one()
-    assert result._allocated_order_lines==batch._allocated_order_lines
+    assert result._allocated_order_lines==batch._allocated_order_lines # type: ignore
 
 def test_order_line_allocation_external_table(session):
     batch = Batch("batch-001", "sku-RED-CHAIR", 2)
