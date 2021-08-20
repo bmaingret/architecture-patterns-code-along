@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import registry, relationship
+from sqlalchemy.orm import registry, relationship # type: ignore 
 
 import allocation
 
