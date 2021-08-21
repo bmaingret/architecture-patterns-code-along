@@ -1,5 +1,5 @@
 import pytest
-from allocation import Batch, OrderLine, allocate
+from allocations.model import Batch, OrderLine, allocate
 
 def test_can_save_and_read_order_line(session):
     order_line = OrderLine('ref-A', 'sku-A', 10)

@@ -1,5 +1,5 @@
 import pytest
-from allocation import Batch, OrderLine, allocate
+from allocations.model import Batch, OrderLine, allocate
 
 def test_order_line_allocation(session, repo):
     batch = Batch("batch-001", "sku-RED-CHAIR", 2)

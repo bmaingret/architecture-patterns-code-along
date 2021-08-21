@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from orm_sqlalchemy import map_allocations, mapper_registry
-import repository
+from allocations.orm_sqlalchemy import map_allocations, mapper_registry
+import allocations.repository
 
 @pytest.fixture
 def session():
@@ -14,6 +14,6 @@ def session():
     session.close()
 
 @pytest.fixture
-def repo(session) -> repository.AbstractRepository:
-    repo = repository.SQLiteInMemoryRepository(session)
+def repo(session) -> allocations.repository.AbstractRepository:
+    repo = allocations.repository.SQLiteInMemoryRepository(session)
     return  repo
