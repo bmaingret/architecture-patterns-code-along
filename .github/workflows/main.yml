@@ -32,3 +32,5 @@ jobs:
           retention-days: 1
       - name: Codecov
         uses: codecov/codecov-action@v2.0.2
+        with:
+          verbose: true
