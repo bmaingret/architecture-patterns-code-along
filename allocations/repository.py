@@ -1,5 +1,5 @@
 from typing import Protocol
-from allocation import Batch, OrderLine
+from allocations.model import Batch, OrderLine
 from abc import abstractmethod
 
 class AbstractRepository(Protocol):

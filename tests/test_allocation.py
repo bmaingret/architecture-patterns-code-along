@@ -1,6 +1,6 @@
 from datetime import datetime, date, timedelta
 import pytest
-from allocation import Batch, OrderLine, allocate
+from allocations.model import Batch, OrderLine, allocate
 
 def test_basic_run():
     assert True

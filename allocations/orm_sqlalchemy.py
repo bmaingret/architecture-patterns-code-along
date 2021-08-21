@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import registry, relationship # type: ignore 
 
-import allocation
+import allocations.model
 
 mapper_registry = registry()
 
@@ -32,9 +32,9 @@ allocations_table = Table(
 )
 
 def map_allocations():
-    mapper_registry.map_imperatively(allocation.OrderLine, order_lines_table)
-    mapper_registry.map_imperatively(allocation.Batch, batches_table, properties={
-        '_allocated_order_lines': relationship(allocation.OrderLine, secondary=allocations_table, collection_class=set)
+    mapper_registry.map_imperatively(allocations.model.OrderLine, order_lines_table)
+    mapper_registry.map_imperatively(allocations.model.Batch, batches_table, properties={
+        '_allocated_order_lines': relationship(allocations.model.OrderLine, secondary=allocations_table, collection_class=set)
     })
 
 map_allocations()
