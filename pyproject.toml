@@ -16,7 +16,7 @@ pytest-cov = "^2.12.1"
 omit = [
     "test_*.py",
     ".venv/*",
-    "virtualenvs/*"
+    "*/virtualenvs/*"
 ]
 
 [build-system]
