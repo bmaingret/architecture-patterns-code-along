@@ -8,9 +8,15 @@ authors = ["Baptiste M <baptiste.maingret@gmail.com>"]
 python = "^3.8.5"
 SQLAlchemy = "^1.4.22"
 
-
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.1"
+pytest-cov = "^2.12.1"
+
+[tool.coverage.run]
+omit = [
+    "test_*.py",
+    ".venv/*"
+]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
