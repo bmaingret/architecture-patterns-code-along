@@ -58,7 +58,4 @@ def test_order_line_allocation_external_table(session):
     session.add(batch)
     session.commit()
     result = dict(session.execute("SELECT * from  allocations").one())
-    assert (result["batch_id"], result["order_line_id"]) == (
-        batch.id,  # type: ignore
-        order_line.id,  # type: ignore
-    )
+    assert (result["batch_id"], result["order_line_id"]) == (batch.id, order_line.id)  # type: ignore

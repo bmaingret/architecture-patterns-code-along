@@ -4,7 +4,6 @@ from abc import abstractmethod
 
 
 class AbstractRepository(Protocol):
-    @abstractmethod
     def add(self, batch: Batch) -> None:
         pass
 

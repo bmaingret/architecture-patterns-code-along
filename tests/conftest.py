@@ -1,4 +1,4 @@
-import pytest  # noqa: E401
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from allocations.orm_sqlalchemy import mapper_registry
