@@ -22,8 +22,6 @@ jobs:
         uses: abatilo/actions-poetry@v2.1.0
       - name: Install dependencies through poetry
         run: poetry install
-      - name: Code Quality
-        uses: pre-commit/action@v2.0.3
       - name: Run tests and coverage
         run: poetry run pytest --cov --cov-report=xml tests/
       - name: 'Upload code coverage result'
