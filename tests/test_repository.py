@@ -1,5 +1,5 @@
-import pytest
 from allocations.model import Batch, OrderLine, allocate
+
 
 def test_order_line_allocation(session, repo):
     batch = Batch("batch-001", "sku-RED-CHAIR", 2)
@@ -8,4 +8,4 @@ def test_order_line_allocation(session, repo):
     repo.add(batch)
     session.commit()
     result = repo.get(batch.reference)
-    assert result._allocated_order_lines==batch._allocated_order_lines
+    assert result._allocated_order_lines == batch._allocated_order_lines
