@@ -1,5 +1,5 @@
 from typing import Protocol, List
-from allocations.model import Batch
+from domain.model import Batch
 from abc import abstractmethod
 
 

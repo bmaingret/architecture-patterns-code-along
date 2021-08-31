@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from .repository import SQLiteInMemoryRepository
-from . import model
+from adapters.repository import SQLiteInMemoryRepository
+from domain import model
 
 
 def create_app(session, test_config=None):

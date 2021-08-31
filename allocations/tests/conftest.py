@@ -1,9 +1,9 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from allocations.orm_sqlalchemy import mapper_registry
-from allocations.repository import SQLiteInMemoryRepository, AbstractRepository
-from allocations.flask_app import create_app
+from adapters.orm_sqlalchemy import mapper_registry
+from adapters.repository import SQLiteInMemoryRepository, AbstractRepository
+from entrypoints.flask_app import create_app
 
 
 @pytest.fixture

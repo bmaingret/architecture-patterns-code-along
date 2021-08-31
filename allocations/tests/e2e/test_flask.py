@@ -1,5 +1,5 @@
-from allocations.repository import SQLiteInMemoryRepository
-from allocations import model
+from adapters.repository import SQLiteInMemoryRepository
+from domain import model
 from datetime import date
 
 

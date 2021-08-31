@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from allocations.model import Batch, OrderLine, allocate
+from domain.model import Batch, OrderLine, allocate
 
 
 def test_basic_run():

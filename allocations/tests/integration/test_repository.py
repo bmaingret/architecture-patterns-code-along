@@ -1,4 +1,4 @@
-from allocations.model import Batch, OrderLine, allocate
+from domain.model import Batch, OrderLine, allocate
 
 
 def test_order_line_allocation(session, repo):
