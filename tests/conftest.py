@@ -2,7 +2,8 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from allocations.orm_sqlalchemy import mapper_registry
-import allocations.repository
+from allocations.repository import SQLiteInMemoryRepository, AbstractRepository
+from allocations.flask_app import create_app
 
 
 @pytest.fixture
@@ -13,9 +14,17 @@ def session():
     session = Session()
     yield session
     session.close()
+    mapper_registry.metadata.drop_all(bind=engine)
 
 
 @pytest.fixture
-def repo(session) -> allocations.repository.AbstractRepository:
-    repo = allocations.repository.SQLiteInMemoryRepository(session)
+def repo(session) -> AbstractRepository:
+    repo = SQLiteInMemoryRepository(session)
     return repo
+
+
+@pytest.fixture
+def client(session):
+    app = create_app(test_config={"TESTING": True}, session=session)
+    with app.test_client() as client:
+        yield client

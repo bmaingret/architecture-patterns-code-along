@@ -1,14 +1,19 @@
-from typing import Protocol
+from typing import Protocol, List
 from allocations.model import Batch
 from abc import abstractmethod
 
 
 class AbstractRepository(Protocol):
+    @abstractmethod
     def add(self, batch: Batch) -> None:
         pass
 
     @abstractmethod
     def get(self, batch_reference: str) -> Batch:
+        pass
+
+    @abstractmethod
+    def list(self) -> List[Batch]:
         pass
 
 
@@ -23,3 +28,6 @@ class SQLiteInMemoryRepository:
         return (
             self.session.query(Batch).filter(Batch.reference == batch_reference).one()
         )
+
+    def list(self) -> List[Batch]:
+        return self.session.query(Batch).all()

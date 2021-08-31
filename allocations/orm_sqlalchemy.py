@@ -1,9 +1,10 @@
-from sqlalchemy import Table, Column, Integer, String, ForeignKey
+from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import registry, relationship  # type: ignore
 
 import allocations.model
 
-mapper_registry = registry()
+metadata_obj = MetaData()
+mapper_registry = registry(metadata_obj)
 
 batches_table = Table(
     "batches",
