@@ -1,6 +1,7 @@
 from typing import Protocol, List
 from domain.model import Batch
 from abc import abstractmethod
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class AbstractRepository(Protocol):
@@ -13,35 +14,32 @@ class AbstractRepository(Protocol):
         pass
 
     @abstractmethod
+    def delete(self, batch_reference: str) -> None:
+        pass
+
+    @abstractmethod
     def list(self) -> List[Batch]:
         pass
 
 
-class SQLiteInMemoryRepository:
+class SQLAlchemyRepository:
     def __init__(self, session) -> None:
         self.session = session
 
     def add(self, batch: Batch) -> None:
-        self.session.add(batch)
+        try:
+            self.get(batch.reference)
+        except NoResultFound:
+            self.session.add(batch)
 
     def get(self, batch_reference: str) -> Batch:
         return (
             self.session.query(Batch).filter(Batch.reference == batch_reference).one()
         )
 
+    def delete(self, batch_reference: str) -> None:
+        to_delete = self.get(batch_reference)
+        self.session.delete(to_delete)
+
     def list(self) -> List[Batch]:
         return self.session.query(Batch).all()
-
-
-class FakeRepository:
-    def __init__(self, batches):
-        self._batches = set(batches)
-
-    def add(self, batch):
-        self._batches.add(batch)
-
-    def get(self, reference):
-        return next(b for b in self._batches if b.reference == reference)
-
-    def list(self):
-        return list(self._batches)

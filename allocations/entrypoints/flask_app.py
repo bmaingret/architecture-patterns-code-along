@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify
-from adapters.repository import SQLiteInMemoryRepository
+from sqlalchemy.orm import scoped_session, sessionmaker
+from adapters.repository import SQLAlchemyRepository
 from domain import model
+from service_layer import services
 
 
-def create_app(session, test_config=None):
+def create_app(engine, test_config=None):
     app = Flask(__name__)
+    session_maker = scoped_session(sessionmaker(bind=engine))
 
     @app.route("/healthcheck")
     def healthcheck():
@@ -12,14 +15,16 @@ def create_app(session, test_config=None):
 
     @app.route("/allocate", methods=["POST"])
     def allocate():
+        data = request.get_json()
+        assert data is not None
         line_to_allocate = model.OrderLine(
-            request.json["order_reference"],
-            request.json["sku"],
-            request.json["quantity"],
+            data["order_reference"],
+            data["sku"],
+            data["quantity"],
         )
-        repo = SQLiteInMemoryRepository(session)
-        batch_ref = model.allocate(line_to_allocate, repo.list())
-        session.commit()
+        session = session_maker()
+        repo = SQLAlchemyRepository(session)
+        batch_ref = services.allocate(line_to_allocate, repo, session)
         return jsonify({"batch_ref": batch_ref}), 201
 
     return app

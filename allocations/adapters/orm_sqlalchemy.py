@@ -1,6 +1,6 @@
 from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import registry, relationship  # type: ignore
-
+from sqlalchemy.orm import registry  # type: ignore
+from sqlalchemy.orm import relationship
 from domain.model import OrderLine, Batch
 
 metadata_obj = MetaData()

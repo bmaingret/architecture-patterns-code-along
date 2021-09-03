@@ -1,4 +1,4 @@
-from adapters.repository import SQLiteInMemoryRepository
+from adapters.repository import SQLAlchemyRepository
 from domain import model
 from datetime import date
 
@@ -8,13 +8,15 @@ def test_flask_app_running(client):
     assert rv.status_code == 200
 
 
-def test_allocation_endpoint_returns_batch_ref(session, client):
+def test_allocation_endpoint_returns_batch_ref(session_on_disk, client):
     batch_warehouse = model.Batch("batch-001", "sku-RED-CHAIR", 10)
     batch_shipping = model.Batch("batch-002", "sku-RED-CHAIR", 10, eta=date.today())
     order_line = model.OrderLine("order-001", "sku-RED-CHAIR", 2)
-    repo = SQLiteInMemoryRepository(session)
+    repo = SQLAlchemyRepository(session_on_disk)
     repo.add(batch_warehouse)
     repo.add(batch_shipping)
+    session_on_disk.commit()
+
     rv = client.post(
         "/allocate",
         json={
@@ -27,13 +29,14 @@ def test_allocation_endpoint_returns_batch_ref(session, client):
     assert rv.get_json()["batch_ref"] == batch_warehouse.reference
 
 
-def test_allocation_endpoint_persists_allocations(session, client):
+def test_allocation_endpoint_persists_allocations(session_on_disk, client):
     batch_warehouse = model.Batch("batch-001", "sku-RED-CHAIR", 10)
     batch_shipping = model.Batch("batch-002", "sku-RED-CHAIR", 10, eta=date.today())
     order_line = model.OrderLine("order-001", "sku-RED-CHAIR", 10)
-    repo = SQLiteInMemoryRepository(session)
+    repo = SQLAlchemyRepository(session_on_disk)
     repo.add(batch_warehouse)
     repo.add(batch_shipping)
+    session_on_disk.commit()
     rv = client.post(
         "/allocate",
         json={
