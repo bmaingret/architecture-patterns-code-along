@@ -14,11 +14,6 @@ class OrderLine:
     quantity: int
 
 
-# class Order:
-#     order_reference: str
-#     order_lines: List[OrderLine]
-
-
 @dataclass
 class Batch:
     reference: str
@@ -27,7 +22,10 @@ class Batch:
     eta: Optional[date] = None
     _allocated_order_lines: Set[OrderLine] = field(default_factory=set, init=False)
 
-    def allocate(self, order_line: OrderLine):
+    def __hash__(self):
+        return hash(self.reference)
+
+    def _allocate(self, order_line: OrderLine):
         if self.can_allocate(order_line):
             if order_line not in self._allocated_order_lines:
                 self._allocated_order_lines.add(order_line)
@@ -43,7 +41,7 @@ def allocate(order_line: OrderLine, batches: List[Batch]):
     sorted_batches = sorted(batches, key=lambda batch: batch.eta or date(MINYEAR, 1, 1))
     for batch in sorted_batches:
         if batch.can_allocate(order_line):
-            batch.allocate(order_line)
+            batch._allocate(order_line)
             return batch.reference
     raise OutOfStock(
         f"No stock left for order_line {order_line.order_reference}, sku {order_line.sku}"

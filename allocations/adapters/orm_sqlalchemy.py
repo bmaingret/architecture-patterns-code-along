@@ -1,9 +1,10 @@
-from sqlalchemy import Table, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import registry, relationship  # type: ignore
+from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import registry  # type: ignore
+from sqlalchemy.orm import relationship
+from domain.model import OrderLine, Batch
 
-import allocations.model
-
-mapper_registry = registry()
+metadata_obj = MetaData()
+mapper_registry = registry(metadata_obj)
 
 batches_table = Table(
     "batches",
@@ -33,13 +34,13 @@ allocations_table = Table(
 
 
 def map_allocations():
-    mapper_registry.map_imperatively(allocations.model.OrderLine, order_lines_table)
+    mapper_registry.map_imperatively(OrderLine, order_lines_table)
     mapper_registry.map_imperatively(
-        allocations.model.Batch,
+        Batch,
         batches_table,
         properties={
             "_allocated_order_lines": relationship(
-                allocations.model.OrderLine,
+                OrderLine,
                 secondary=allocations_table,
                 collection_class=set,
             )
