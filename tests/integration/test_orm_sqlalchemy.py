@@ -1,4 +1,4 @@
-from domain.model import Batch, OrderLine, allocate
+from allocations.domain.model import Batch, OrderLine, allocate
 
 
 def test_can_save_and_read_order_line(session_in_memory):

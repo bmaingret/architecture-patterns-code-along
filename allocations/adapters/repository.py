@@ -1,5 +1,5 @@
 from typing import Protocol, List
-from domain.model import Batch
+from allocations.domain.model import Batch
 from abc import abstractmethod
 from sqlalchemy.orm.exc import NoResultFound
 

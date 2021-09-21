@@ -51,7 +51,7 @@ def test_allocation_endpoint_persists_allocations(client):
     rv = client.post(
         "/allocate",
         json={
-            "order_reference": "order-001",
+            "order_reference": "order-002",
             "sku": "sku-RED-CHAIR",
             "quantity": 10,
         },

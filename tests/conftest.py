@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from adapters.orm_sqlalchemy import mapper_registry
-from entrypoints.flask_app import create_app
+from allocations.adapters.orm_sqlalchemy import mapper_registry
+from allocations.entrypoints.flask_app import create_app
 
 
 @pytest.fixture

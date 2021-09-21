@@ -1,5 +1,5 @@
-from adapters.repository import SQLAlchemyRepository
-from domain.model import Batch, OrderLine, allocate
+from allocations.adapters.repository import SQLAlchemyRepository
+from allocations.domain.model import Batch, OrderLine, allocate
 
 
 def test_order_line_allocation(session_in_memory):

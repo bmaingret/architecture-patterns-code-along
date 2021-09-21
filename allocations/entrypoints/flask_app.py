@@ -1,9 +1,8 @@
 from datetime import date
 from flask import Flask, request, jsonify
 from sqlalchemy.orm import scoped_session, sessionmaker
-from adapters.repository import SQLAlchemyRepository
-from domain import model
-from service_layer import services
+from allocations.domain import model
+from allocations.service_layer import services, unit_of_work
 
 
 def create_app(engine, test_config=None):
@@ -23,9 +22,9 @@ def create_app(engine, test_config=None):
             data["sku"],
             data["quantity"],
         )
-        session = session_maker()
-        repo = SQLAlchemyRepository(session)
-        batch_ref = services.allocate(repo, session, line_to_allocate)
+        batch_ref = services.allocate(
+            line_to_allocate, unit_of_work.SQLAlchemyUnitOfWork(session_maker)
+        )
         return jsonify({"batch_ref": batch_ref}), 201
 
     @app.route("/add_batch", methods=["POST"])
@@ -35,11 +34,8 @@ def create_app(engine, test_config=None):
         eta = data.get("eta")
         if eta is None:
             eta = date.today()
-        session = session_maker()
-        repo = SQLAlchemyRepository(session)
         batch_ref = services.add_batch(
-            repo,
-            session,
+            unit_of_work.SQLAlchemyUnitOfWork(session_maker),
             data["reference"],
             data["sku"],
             data["available_quantity"],

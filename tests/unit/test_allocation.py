@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from domain.model import Batch, OrderLine, allocate
+from allocations.domain.model import Batch, OrderLine, allocate
 
 
 def test_allocating_same_line_twice_count_for_one_line():

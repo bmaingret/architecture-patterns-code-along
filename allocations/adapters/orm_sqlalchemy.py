@@ -1,7 +1,7 @@
 from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import registry  # type: ignore
 from sqlalchemy.orm import relationship
-from domain.model import OrderLine, Batch
+from allocations.domain.model import OrderLine, Batch
 
 metadata_obj = MetaData()
 mapper_registry = registry(metadata_obj)

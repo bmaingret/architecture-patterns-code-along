@@ -1,4 +1,4 @@
-from domain.model import Batch, OrderLine
+from allocations.domain.model import Batch, OrderLine
 
 
 def test_allocating_x_unit_reduce_quantity_by_x():
