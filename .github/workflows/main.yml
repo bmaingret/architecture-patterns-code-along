@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies through poetry
         run: poetry install
       - name: Run tests and coverage
-        run: poetry run pytest --cov --cov-report=xml allocations/tests/
+        run: poetry run pytest --cov --cov-report=xml tests/
       - name: 'Upload code coverage result'
         uses: actions/upload-artifact@v2
         with:
