@@ -6,7 +6,9 @@ from allocations.service_layer.unit_of_work import AbstractUnitOfWork
 
 def allocate(order_line: model.OrderLine, uow: AbstractUnitOfWork):
     with uow:
-        allocated_ref = model.allocate(order_line, uow.batches.list())
+        product = uow.products.get(order_line.sku)
+        print(product.batches)
+        allocated_ref = product.allocate(order_line)
         uow.commit()
     return allocated_ref
 
@@ -19,7 +21,12 @@ def add_batch(
     eta: Optional[date] = None,
 ) -> None:
     with uow:
-        uow.batches.add(
+        product = uow.products.get(sku)
+        if product is None:
+            product = model.Product(sku, [])
+            uow.products.add(product)
+            print("new product")
+        product.batches.append(
             model.Batch(
                 reference=reference,
                 sku=sku,

@@ -39,3 +39,9 @@ def session_on_disk(on_disk_engine):
     session_maker = scoped_session(sessionmaker(bind=on_disk_engine))
     session = session_maker()
     yield session
+
+
+@pytest.fixture
+def session_factory(in_memory_engine):
+    session_factory = scoped_session(sessionmaker(bind=in_memory_engine))
+    yield session_factory

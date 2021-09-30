@@ -1,24 +1,15 @@
-from typing import Protocol, List
-from allocations.domain.model import Batch
+from typing import Protocol
+from allocations.domain.model import Product
 from abc import abstractmethod
-from sqlalchemy.orm.exc import NoResultFound
 
 
 class AbstractRepository(Protocol):
     @abstractmethod
-    def add(self, batch: Batch) -> None:
+    def add(self, product: Product) -> None:
         pass
 
     @abstractmethod
-    def get(self, batch_reference: str) -> Batch:
-        pass
-
-    @abstractmethod
-    def delete(self, batch_reference: str) -> None:
-        pass
-
-    @abstractmethod
-    def list(self) -> List[Batch]:
+    def get(self, sku: str) -> Product:
         pass
 
 
@@ -26,20 +17,8 @@ class SQLAlchemyRepository:
     def __init__(self, session) -> None:
         self.session = session
 
-    def add(self, batch: Batch) -> None:
-        try:
-            self.get(batch.reference)
-        except NoResultFound:
-            self.session.add(batch)
+    def add(self, product: Product) -> None:
+        self.session.add(product)
 
-    def get(self, batch_reference: str) -> Batch:
-        return (
-            self.session.query(Batch).filter(Batch.reference == batch_reference).one()
-        )
-
-    def delete(self, batch_reference: str) -> None:
-        to_delete = self.get(batch_reference)
-        self.session.delete(to_delete)
-
-    def list(self) -> List[Batch]:
-        return self.session.query(Batch).all()
+    def get(self, sku: str) -> Product:
+        return self.session.query(Product).filter_by(sku=sku).first()

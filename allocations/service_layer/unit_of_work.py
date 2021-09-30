@@ -1,9 +1,13 @@
+from abc import abstractmethod
 from typing import Protocol
 from allocations.adapters import repository
 
 
 class AbstractUnitOfWork(Protocol):
-    def __enter__(self):
+    products: repository.AbstractRepository
+
+    @abstractmethod
+    def __enter__(self) -> "AbstractUnitOfWork":
         pass
 
     def __exit__(self, exn_type, exn_value, traceback):
@@ -15,9 +19,6 @@ class AbstractUnitOfWork(Protocol):
     def rollback(self):
         pass
 
-    def batches(self):
-        pass
-
 
 class SQLAlchemyUnitOfWork:
     def __init__(self, session_factory):
@@ -25,7 +26,7 @@ class SQLAlchemyUnitOfWork:
 
     def __enter__(self):
         self.session = self.session_factory()
-        self.batches = repository.SQLAlchemyRepository(self.session)
+        self.products = repository.SQLAlchemyRepository(self.session)
         return self
 
     def __exit__(self, exn_type, exn_value, traceback):

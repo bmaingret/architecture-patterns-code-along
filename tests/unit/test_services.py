@@ -4,25 +4,19 @@ from allocations.service_layer import services
 
 
 class FakeRepository(AbstractRepository):
-    def __init__(self, batches):
-        self._batches = set(batches)
+    def __init__(self, products):
+        self._products = set(products)
 
-    def add(self, batch):
-        self._batches.add(batch)
+    def add(self, product):
+        self._products.add(product)
 
-    def get(self, reference):
-        return next(b for b in self._batches if b.reference == reference)
-
-    def delete(self, reference):
-        self._batches.remove(reference)
-
-    def list(self):
-        return list(self._batches)
+    def get(self, sku):
+        return next((b for b in self._products if b.sku == sku), None)
 
 
 class FakeUnitOfWork:
     def __init__(self):
-        self.batches = FakeRepository([])
+        self.products = FakeRepository([])
         self.committed = False
 
     def __enter__(self):
