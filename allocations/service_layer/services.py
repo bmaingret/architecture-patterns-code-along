@@ -2,6 +2,7 @@ from typing import Optional
 from datetime import date
 from allocations.domain import model
 from allocations.service_layer.unit_of_work import AbstractUnitOfWork
+from . import message_bus
 
 
 def allocate(order_line: model.OrderLine, uow: AbstractUnitOfWork):
@@ -10,6 +11,8 @@ def allocate(order_line: model.OrderLine, uow: AbstractUnitOfWork):
         print(product.batches)
         allocated_ref = product.allocate(order_line)
         uow.commit()
+        for event in product.events:
+            message_bus.handle(event)
     return allocated_ref
 
 
@@ -25,7 +28,6 @@ def add_batch(
         if product is None:
             product = model.Product(sku, [])
             uow.products.add(product)
-            print("new product")
         product.batches.append(
             model.Batch(
                 reference=reference,
@@ -35,3 +37,5 @@ def add_batch(
             )
         )
         uow.commit()
+        for event in product.events:
+            message_bus.handle(event)

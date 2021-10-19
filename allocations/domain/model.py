@@ -1,6 +1,7 @@
 from typing import List, Optional, Set
 from dataclasses import dataclass, field
 from datetime import date, MINYEAR
+from .events import Event, OutOfStockEvent
 
 
 class OutOfStock(Exception):
@@ -41,8 +42,9 @@ class Product:
     def __init__(self, sku: str, batches: List[Batch]):
         self.sku = sku
         self.batches = batches
+        self.events = []  # type: List[Event]
 
-    def allocate(self, order_line: OrderLine) -> str:
+    def allocate(self, order_line: OrderLine) -> Optional[str]:
         sorted_batches = sorted(
             self.batches, key=lambda batch: batch.eta or date(MINYEAR, 1, 1)
         )
@@ -50,6 +52,5 @@ class Product:
             if batch.can_allocate(order_line):
                 batch._allocate(order_line)
                 return batch.reference
-        raise OutOfStock(
-            f"No stock left for order_line {order_line.order_reference}, sku {order_line.sku}"
-        )
+        self.events.append(OutOfStockEvent(sku=order_line.sku))
+        return None

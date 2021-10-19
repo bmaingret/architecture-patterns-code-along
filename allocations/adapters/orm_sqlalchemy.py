@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey
+from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey, event
 from sqlalchemy.orm import registry  # type: ignore
 from sqlalchemy.orm import relationship
 from allocations.domain.model import OrderLine, Batch, Product
@@ -53,6 +53,11 @@ def map_allocations():
     mapper_registry.map_imperatively(
         Product, product_table, properties={"batches": relationship(Batch)}
     )
+
+
+@event.listens_for(Product, "load")
+def receive_load(product, _):
+    product.events = []
 
 
 map_allocations()
