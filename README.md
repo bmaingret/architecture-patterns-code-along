@@ -6,3 +6,5 @@
 Code along the book [Architecture Patterns with Python](https://github.com/cosmicpython/book) by Harry Percival, Bob Gregory
 
 Check git tags to follow through chapters.
+
+N.B. Code in this repository is the result of trying things out with no other end goald or purpose.
